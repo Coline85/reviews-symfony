@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Home({ companies }) {
+    let [search, setSearch] = useState('');
+
+
     return (
-        <div className='text-blue-500 font-bold text-2xl'>
-            Hello React
+        <div>
+            <h2 className='text-blue-500 font-bold text-2xl'>Hello React</h2>
+
+            <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
 
             <ul>
-                {companies.map(company => <li>{company}</li>)}
+                {companies.filter(company => company.toLowerCase().includes(search.toLowerCase())).map(company => <li>{company}</li>)}
             </ul>
         </div>
     )
