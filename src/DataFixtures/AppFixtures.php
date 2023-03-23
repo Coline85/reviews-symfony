@@ -2,9 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Review;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
@@ -16,7 +18,6 @@ class AppFixtures extends Fixture
         $this->hasher = $hasher;
     }
 
-
     public function load(ObjectManager $manager): void
     {
         $user = new User();
@@ -26,6 +27,15 @@ class AppFixtures extends Fixture
         $user->setRoles(['ROLE_ADMIN']);
         $manager->persist($user);
 
+        $faker = Factory::create('fr_FR');
+
+        for ($i = 0; $i < 10; $i++) {
+            $review = new Review();
+            $review->setContent($faker->text());
+            $review->setCreatedAt(\DateTimeImmutable::createFromMutable($faker->dateTime()));
+            $review->setUser($user);
+            $manager->persist($review);
+        }
 
         $manager->flush();
     }
